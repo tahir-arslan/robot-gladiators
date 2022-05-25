@@ -1,27 +1,17 @@
-// Game States
-// "WIN" - Player robot has defeated all enemy-robots
-//    * Fight all enemy-robots
-//    * Defeat each enemy-robot
-// "LOSE" - Player robot's health is zero or less
-
 var playerName = window.prompt("What is your robot's name?");
 var playerHealth = 100;
 var playerAttack = 10;
 var playerMoney = 10;
 
+var enemyNames = ["Roborto","Amy Anddroid","Robo Trumble"];
+var enemyHealth = 60;
 var enemyAttack = 12;
 
-console.log(playerName, playerAttack, playerHealth);
-
-var enemyNames = ["Roborto","Amy Anddroid","Robo Trumble"];
-for(var i=0; i<enemyNames.length; i++) {
-    console.log(enemyNames[i]);
-    console.log(i);
-    console.log(enemyNames[i] + " is at " + i + " index");
+//random number generator
+var randomNumber = function(min, max) {
+    var value = Math.floor(Math.random() * (max - min + 1) +min);
+    return value;
 }
-
-var enemyHealth = 50;
-
 
 var fight = function(enemyName) {
     // this will repeat as long as enemy is alive
@@ -35,14 +25,17 @@ var fight = function(enemyName) {
             if (confirmSkip) {
                 //If yes, leave fight at cost
                 window.alert(playerName + " had decided to skip this fight. Goodbye!");
-                playerMoney = playerMoney - 10;
+                playerMoney = Math.max(0, playerMoney - 10);
                 console.log("playerMoney", playerMoney);
                 break;
             }
         } //end of if skip
 
+        // random hit generation
+        var damage = randomNumber(playerAttack - 3, playerAttack);
+
         // Subtract enemyHealth from playerAttack
-        enemyHealth = enemyHealth - playerAttack;
+        enemyHealth = Math.max(0, enemyHealth - damage);
         console.log(enemyName + ' attacked ' + playerName + '. ' + playerName + ' now has ' + playerHealth + ' health remaining.');
 
         //Check enemy health
@@ -55,8 +48,11 @@ var fight = function(enemyName) {
             window.alert(enemyName + " still has " + enemyHealth + " health left.");
         }
 
+        //random hit gen
+        var damage = randomNumber(enemyAttack - 3, enemyAttack);
+
         //Subtract playerHealth from enemyAttack
-        playerHealth = playerHealth - enemyAttack;
+        playerHealth = Math.max(0, playerHealth - damage);
         //Log result to confirm
         console.log(enemyName + " attacked " + playerName + "! " + playerName + " now has " + playerHealth + " health remaining.");
         //Check player health
@@ -82,8 +78,7 @@ var startGame = function() {
             // pick new enemy based on array
             var pickedEnemyName = enemyNames[i];
             // reset enemy health for new round
-            enemyHealth = 50;
-            debugger;
+            enemyHealth = randomNumber(40,60);
             // passing new enemy name into fight function
             fight(pickedEnemyName);
             // call for shop if there are still enemies present
@@ -97,8 +92,6 @@ var startGame = function() {
             window.alert ("You have lost your robot in battle! Game over!");
             break;
         }
-        // play again
-        startGame();
     }
     endGame();
 }
@@ -123,10 +116,12 @@ var shop = function() {
     var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one of the following: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice.");
     switch (shopOptionPrompt) {
         // case "REFILL": followed immediately by case "refill": works because there is no
-        // break inbetween, so the code continues and are 'connected.'
+        // break inbetween, so the code continues and are 'connected.' Therefore if 
+        // case "REFILL" condition is met, it will automatically meet the condition for
+        // case "refill" and continue to execute it's code.
         case "REFILL":
         case "refill":
-            if (playermoney >=7) {
+            if (playerMoney >=7) {
                 window.alert("Refilling player's health by 20 for 7 dollars.");
                 playerHealth = playerHealth + 20;
                 playerMoney = playerMoney - 7;
