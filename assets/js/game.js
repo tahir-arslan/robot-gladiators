@@ -109,22 +109,20 @@ var endGame = function() {
 };
 
 var shop = function() {
-    var shopOptionPrompt = window.prompt("Would you like to REFILL your health, UPGRADE your attack, or LEAVE the store? Please enter one of the following: 'REFILL', 'UPGRADE', or 'LEAVE' to make a choice.");
+    var shopOptionPrompt = window.prompt("Would you like to refill your health, upgrade your attack, or leave the store? Please enter 1 to refill, 2 to upgrade, or 3 to leave the shop.");
+    shopOptionPrompt = parseInt(shopOptionPrompt);
     switch (shopOptionPrompt) {
         // case "REFILL": followed immediately by case "refill": works because there is no
         // break inbetween, so the code continues and are 'connected.' Therefore if 
         // case "REFILL" condition is met, it will automatically meet the condition for
         // case "refill" and continue to execute it's code.
-        case "REFILL":
-        case "refill":
+        case 1:
             playerInfo.refilHealth();
             break;
-        case "UPGRADE":
-        case "upgrade":
+        case 2:
             playerInfo.upgradeAttack();
             break;
-        case "LEAVE":
-        case "leave":
+        case 3:
             window.alert("Leaving the store.");
             break;
         default:
